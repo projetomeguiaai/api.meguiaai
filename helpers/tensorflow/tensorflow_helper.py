@@ -120,6 +120,6 @@ def predict(img_url, model, class_names):
 
     # --> Retorna a prediction
     return (
-        "This image most likely belongs to '{}' with a {:.2f} percent confidence."
+        "Você está na '{}' com uma probabilidade de {:.2f}"
         .format(class_names[np.argmax(score)], 100 * np.max(score))
     )
