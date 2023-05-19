@@ -6,4 +6,4 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"data": run_model()}
+    return {"data": "Teste"}

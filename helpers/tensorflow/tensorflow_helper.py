@@ -67,15 +67,10 @@ def configure_train_val_ds(data_dir):
         "class_names": class_names,
     }
 
-def run_model():
 
-   
-
-
-    
-
-
-    # Cria um model
+# Cria um modelo
+def create_model(train_ds, val_ds, class_names):
+    # --> Define as etapas do model
     model = Sequential([
         layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
         layers.Conv2D(16, 3, padding="same", activation="relu"),
@@ -88,7 +83,7 @@ def run_model():
         layers.Dense(len(class_names))
     ])
 
-    # --> Valida
+    # --> Compila
     model.compile(optimizer="adam",
                 loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                 metrics=['accuracy'])
@@ -98,27 +93,26 @@ def run_model():
 
     # --> Testa com 7 etapas (epochs)
     epochs = 7
-    history = model.fit(
+    model.fit(
         train_ds,
         validation_data = val_ds,
         epochs = epochs
     )
 
+    return model
 
+
+def predict(img_url, model, class_names):
     # Faz uma prediction
-
     ## Baixa a imagem
-    pred_image_path = "https://drive.google.com/uc?export=download&id=1I3uzeJHQ0T0_DPKMs0n2S6K9ulZuF3gX"
+    pred_image_url = "https://drive.google.com/uc?export=download&id=1I3uzeJHQ0T0_DPKMs0n2S6K9ulZuF3gX"
 
-    data_dir = tf.keras.utils.get_file('testes', origin=pred_image_path, untar=True)
-    data_dir = pathlib.Path(data_dir)
-    pred_images = list(data_dir.glob('*'))
-    pred_images_count = len(pred_images)
+    pred_image = tf.keras.utils.get_file('testes', origin=pred_image_url, untar=True)
 
-    print(pred_images_count)
+    print(pred_image)
 
     img = tf.keras.utils.load_img(
-        pred_images[5], target_size=(img_height, img_width)
+        pred_image, target_size=(img_height, img_width)
     )
 
     img_array = tf.keras.utils.img_to_array(img)
