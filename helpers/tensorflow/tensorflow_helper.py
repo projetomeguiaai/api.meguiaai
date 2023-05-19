@@ -1,32 +1,37 @@
 import matplotlib.pyplot as plt
-import PIL
-import os
-import numpy as np
 import tensorflow as tf
+import numpy as np
 import pathlib
+import os
 
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 
-def run_model():
-    # Baixa Dataset das imagens a serem treinadas
-    dataset_url = "https://drive.google.com/uc?export=download&id=1DUtezZYuhaYJCagw4yfcRRfDsEbYB3-9"
+
+# Define uma altura e comprimento padrao para as imagens
+img_width = 260
+img_height = 180
+batch_size = 32
+
+# Carrega um dataset de um link
+def load_dataset_from_link(dataset_url):
+    # Baixa a pasta zipada e extrai
     data_dir = tf.keras.utils.get_file('imagens_escola', origin=dataset_url, untar=True)
     data_dir = pathlib.Path(data_dir)
 
-    # Lista e conta as imagens
+    # Lista, conta e imprime
     images_list = list(data_dir.glob('*/*'))
     images_count = len(images_list)
-
     print(images_count)
 
-    # Define uma altura e comprimento padrao
-    img_width = 260
-    img_height = 180
-    batch_size = 32
+    # Retorna a lista de diretorios (classes) com suas imagens
+    return images_list
 
-    # Pega 80% das imagens do dataset para treinamento
+
+# Configura os datasets de treino e validação
+def configure_train_val_ds(data_dir):
+ # Pega 80% das imagens do dataset para treinamento
     train_ds = tf.keras.utils.image_dataset_from_directory(
         data_dir,
         validation_split = 0.2,
@@ -38,31 +43,36 @@ def run_model():
 
     # Pega 20% para validacao
     val_ds = tf.keras.utils.image_dataset_from_directory(
-    data_dir,
-    validation_split = 0.2,
-    subset = "validation",
-    seed = 123,
-    image_size = (img_height, img_width),
-    batch_size = batch_size
+        data_dir,
+        validation_split = 0.2,
+        subset = "validation",
+        seed = 123,
+        image_size = (img_height, img_width),
+        batch_size = batch_size
     )
-
-    # Pega as classes que existem no DS
-    class_names = train_ds.class_names
-
-    print(class_names)
-
 
     # Deixa as imagens normalizadas com AUTOTUNE
     AUTOTUNE = tf.data.AUTOTUNE
-
     train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
     val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
 
-    normalization_layer = layers.Rescaling(1./255)
+    # Pega as classes que existem no DS
+    class_names = train_ds.class_names
+    print(class_names)
 
-    normalized_ds = train_ds.map(lambda x, y: (normalization_layer(x), y))
-    image_batch, labels_batch = next(iter(normalized_ds))
-    first_image = image_batch[0]
+    # Retorna os datasets e o nome das classes
+    return {
+        "train_ds": train_ds, 
+        "val_ds": val_ds,
+        "class_names": class_names,
+    }
+
+def run_model():
+
+   
+
+
+    
 
 
     # Cria um model
