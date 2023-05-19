@@ -22,8 +22,6 @@ def load_dataset_from_link(dataset_url):
 
     # Lista, conta e imprime
     images_list = list(data_dir.glob('*/*'))
-    images_count = len(images_list)
-    print(images_count)
 
     # Retorna a lista de diretorios (classes) com suas imagens
     return images_list
@@ -58,7 +56,6 @@ def configure_train_val_ds(data_dir):
 
     # Pega as classes que existem no DS
     class_names = train_ds.class_names
-    print(class_names)
 
     # Retorna os datasets e o nome das classes
     return {
@@ -102,11 +99,10 @@ def create_model(train_ds, val_ds, class_names):
     return model
 
 
+# Faz uma prediction
 def predict(img_url, model, class_names):
-    # Faz uma prediction
-    ## Baixa a imagem
+    # --> Baixa a imagem
     pred_image_url = "https://drive.google.com/uc?export=download&id=1I3uzeJHQ0T0_DPKMs0n2S6K9ulZuF3gX"
-
     pred_image = tf.keras.utils.get_file('testes', origin=pred_image_url, untar=True)
 
     print(pred_image)
@@ -118,9 +114,11 @@ def predict(img_url, model, class_names):
     img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)
 
+    # --> Prediz
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
 
+    # --> Retorna a prediction
     return (
         "This image most likely belongs to '{}' with a {:.2f} percent confidence."
         .format(class_names[np.argmax(score)], 100 * np.max(score))
