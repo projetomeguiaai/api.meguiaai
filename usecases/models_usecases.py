@@ -9,5 +9,3 @@ def make_prediction(model_id, image):
 def get_all_models():
     pass
 
-def create_model():
-    pass
