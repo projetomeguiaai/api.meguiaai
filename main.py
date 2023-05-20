@@ -9,5 +9,5 @@ app = FastAPI()
 
 
 @app.get('/')
-async def asdf():
+def asdf():
     return {"data": "data"}
