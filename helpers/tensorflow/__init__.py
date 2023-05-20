@@ -6,7 +6,7 @@ import os
 
 from tensorflow import keras
 from tensorflow.keras import layers
-from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import Sequential, load_model
 
 
 # Define uma altura e comprimento padrao para as imagens
@@ -20,15 +20,12 @@ def load_dataset_from_link(dataset_url):
     data_dir = tf.keras.utils.get_file('imagens_escola', origin=dataset_url, untar=True)
     data_dir = pathlib.Path(data_dir)
 
-    # Lista, conta e imprime
-    images_list = list(data_dir.glob('*/*'))
-
     # Retorna a lista de diretorios (classes) com suas imagens
-    return images_list
+    return data_dir
 
 
 # Configura os datasets de treino e validação
-def configure_train_val_ds(data_dir):
+def configure_dataset_data(data_dir):
  # Pega 80% das imagens do dataset para treinamento
     train_ds = tf.keras.utils.image_dataset_from_directory(
         data_dir,
@@ -49,13 +46,13 @@ def configure_train_val_ds(data_dir):
         batch_size = batch_size
     )
 
+    # Pega as classes que existem no DS
+    class_names = train_ds.class_names
+
     # Deixa as imagens normalizadas com AUTOTUNE
     AUTOTUNE = tf.data.AUTOTUNE
     train_ds = train_ds.cache().shuffle(1000).prefetch(buffer_size=AUTOTUNE)
     val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
-
-    # Pega as classes que existem no DS
-    class_names = train_ds.class_names
 
     # Retorna os datasets e o nome das classes
     return {
@@ -84,14 +81,11 @@ def create_model(train_ds, val_ds, class_names):
     model.compile(optimizer="adam",
                 loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                 metrics=['accuracy'])
-
-    # --> Sumariza
-    model.summary()
-
-    # --> Testa com 7 etapas (epochs)
+    
+    # --> Treina
     epochs = 7
     model.fit(
-        train_ds,
+    train_ds,
         validation_data = val_ds,
         epochs = epochs
     )
@@ -99,13 +93,16 @@ def create_model(train_ds, val_ds, class_names):
     return model
 
 
+def load_saved_model(model_dir):
+    return load_model(model_dir)
+
+
 # Faz uma prediction
 def predict(img_url, model, class_names):
-    # --> Baixa a imagem
-    pred_image_url = "https://drive.google.com/uc?export=download&id=1I3uzeJHQ0T0_DPKMs0n2S6K9ulZuF3gX"
-    pred_image = tf.keras.utils.get_file('testes', origin=pred_image_url, untar=True)
+    img_name = img_url[-33::]
+    pred_image = tf.keras.utils.get_file(img_name, origin=img_url)
 
-    print(pred_image)
+    print(img_name)
 
     img = tf.keras.utils.load_img(
         pred_image, target_size=(img_height, img_width)
