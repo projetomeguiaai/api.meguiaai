@@ -1,10 +1,21 @@
 from fastapi import FastAPI
 from controllers.models_controller import models_router
+from dotenv import load_dotenv
+
+# Carrega a .env
+load_dotenv()
+
+# Conecta o banco
 
 # Cria a instância
 app = FastAPI()
-# Adiciona as rotas para cada entidade
 app.include_router(models_router)
+
+
+@app.get('/')
+async def asdf():
+    return {"data": "dADASD"}
+
 
 # dataset = load_dataset_from_link('https://drive.google.com/uc?export=download&id=1DUtezZYuhaYJCagw4yfcRRfDsEbYB3-9')
 # dataset_data = configure_dataset_data(dataset)
@@ -15,8 +26,3 @@ app.include_router(models_router)
 #     img_url="https://drive.google.com/uc?export=download&id=1Toa5h34w0nVqseIoEhwitxurM_gWcJRQ",
 #     model=model,
 #     class_names=dataset_data["class_names"])
-
-
-@app.get('/')
-async def asdf():
-    return {"data": "ASDF"}
