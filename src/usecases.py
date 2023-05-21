@@ -12,6 +12,5 @@ def find_all_tfmodels(db: Session, skip: int = 0, limit: int = 100):
     .all()
   )
 
-
 def create_tfmodel(db: Session, model: TFModel):
-
+  pass

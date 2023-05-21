@@ -1,6 +1,6 @@
 from .schemas import TFModel
 from .database import get_db
-from .usecases import find_all_users
+from .usecases import *
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 
@@ -11,5 +11,5 @@ tfmodels_router = APIRouter(
 )
 
 @tfmodels_router.get("/", response_model=list[TFModel])
-def get_all_users(db: Session = Depends(get_db)):
-    return find_all_users(db)
+def all_tfmodels(db: Session = Depends(get_db)):
+    return find_all_tfmodels(db)
