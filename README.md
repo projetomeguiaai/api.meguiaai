@@ -10,13 +10,15 @@ API criada para classificação de imagens com Tensorflow e FastAPI do projeto c
 Requisitos:
 - Python 3.10 >
 - pip 23.1.2 >
-- virtualenv
+- poetry (latest)
 
-Clone o repositório `https://github.com/victor-renan/api.meguiaai`
+Primeiramente, clone o repositório `https://github.com/victor-renan/api.meguiaai`
 
-Inicialmente é necessário criar um ambiente virtual em Python com o `virtualenv`
+Em seguida, instale o `poetry` para instalar os pacotes e gerenciar os envs
 
-Em seguida é necessário rodar o comando `pip install -r requirements.txt`
+Após isso, entre no diretório do projeto com `cd api.meguiaai` e digite `poetry install`
+
+Ao instalar, digite `poetry shell` e em seguida `uvicorn --reload src/app:app --port 5000`
 
 
 *Valeu!*
