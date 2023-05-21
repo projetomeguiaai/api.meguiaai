@@ -1,3 +1,3 @@
 #!/bin/sh
 
-uvicorn main:app --reload --port 5000
+uvicorn src.main:app --reload --port 5000
