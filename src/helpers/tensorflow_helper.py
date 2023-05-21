@@ -98,25 +98,22 @@ def load_saved_model(model_dir):
 
 
 # Faz uma prediction
-def predict(img_url, model, class_names):
-    img_name = img_url[-33::]
-    pred_image = tf.keras.utils.get_file(img_name, origin=img_url)
-
-    print(img_name)
+def predict(img_path, model, labels):
+    model = load_model(model)
 
     img = tf.keras.utils.load_img(
-        pred_image, target_size=(img_height, img_width)
+        img_path, target_size=(img_height, img_width)
     )
 
     img_array = tf.keras.utils.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)
 
     # --> Prediz
-    predictions = model.predict(img_array)
-    score = tf.nn.softmax(predictions[0])
+    prediction = model.predict(img_array)
+    score = tf.nn.softmax(prediction[0])
 
     # --> Retorna a prediction
     return (
         "Você está na '{}' com uma probabilidade de {:.2f}"
-        .format(class_names[np.argmax(score)], 100 * np.max(score))
+        .format(labels[np.argmax(score)], 100 * np.max(score))
     )

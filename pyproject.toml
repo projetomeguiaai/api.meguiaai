@@ -19,6 +19,8 @@ psycopg2 = "^2.9.6"
 tortoise-orm = "^0.19.3"
 peewee = "^3.16.2"
 sqlalchemy = ">=1.0,<2.0"
+h5py = "^3.8.0"
+python-multipart = "^0.0.6"
 
 
 [tool.poetry.group.dev.dependencies]
