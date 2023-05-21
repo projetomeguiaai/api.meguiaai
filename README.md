@@ -1,5 +1,13 @@
 # Me Guia.AI API
-API criada para classificação de imagens com Tensorflow e FastAPI do projeto científico Me Guia.AI do FESTEC V
+_API_ para o consumo do app **Me Guia.AI** destinada a classificação de imagens com Tensorflow e FastAPI do projeto científico Me Guia.AI do FESTEC V
+
+![Imagem do Projeto](https://i.imgur.com/7k04DAP.png)
+
+
+> "A verdadeira deficiência esta nas pessoas que se limitam; e tentam limitar quem deseja fazer o que elas não conseguem!"
+>
+> -Nino Milanês
+
 
 ## Tecnologias utillizadas
 - Python
