@@ -26,7 +26,7 @@ Em seguida, instale o `poetry` para instalar os pacotes e gerenciar os envs
 
 Após isso, entre no diretório do projeto com `cd api.meguiaai` e digite `poetry install`
 
-Ao instalar, digite `poetry shell` e em seguida `uvicorn --reload src/app:app --port 5000`
+Ao instalar, digite `poetry shell` e em seguida `uvicorn --reload src/main:app --port 5000`
 
 
 *Valeu!*
