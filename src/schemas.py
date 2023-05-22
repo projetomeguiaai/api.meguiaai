@@ -3,7 +3,7 @@ from fastapi import UploadFile, File
 from typing import Annotated
 
 
-# Schemas para validação dos dados
+# Validação do model TFModel
 class TFModel(BaseModel):
     id: int
     name: str
@@ -14,6 +14,7 @@ class TFModel(BaseModel):
         orm_mode = True
 
 
+# DTO para validação de uma criação de TFModel
 class CreateTFModel(BaseModel):
     name: str
     model: str
@@ -23,6 +24,7 @@ class CreateTFModel(BaseModel):
         orm_mode = True
 
 
+# DTO para validação de uma adição de TFModel
 class AddTFModel(BaseModel):
     name: str
     model_path: str
@@ -32,6 +34,7 @@ class AddTFModel(BaseModel):
         orm_mode = True
 
 
+# DTO para validação de uma predict de TFModel
 class ModelPredict(BaseModel):
     model_id: int
     img_path: str

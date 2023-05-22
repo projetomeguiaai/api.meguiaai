@@ -13,7 +13,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.include_router(routers.tfmodels_router)
 
-# Habilta o CORS
+# Habilta o CORS (Sites Externos)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -24,5 +24,4 @@ app.add_middleware(
 # Rota inicial
 @app.get("/")
 def main():
-    file = open("./src/data/asdf.txt")
-    return {"message": "Bem vindo a API Me Guia.AI!", "file": file}
+    return {"message": "Bem vindo a API Me Guia.AI!"}

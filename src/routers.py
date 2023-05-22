@@ -1,9 +1,8 @@
 from .import schemas
 from .database import get_db
 from . import usecases
-from fastapi import Depends, APIRouter, UploadFile, File, HTTPException
+from fastapi import Depends, APIRouter,HTTPException
 from sqlalchemy.orm import Session
-from typing import Annotated
 
 
 # Router para os TFModels
@@ -12,13 +11,13 @@ tfmodels_router = APIRouter(
   tags=["models"]
 )
 
-# Rota inicial
+## Rota inicial, Obtem todos os models
 @tfmodels_router.get("/", response_model=list[schemas.TFModel])
 def tfmodel_all(db: Session = Depends(get_db)):
   return usecases.find_all_tfmodels(db)
 
 
-# pega um model pelo id
+## Pega um model pelo ID
 @tfmodels_router.get("/{id}", response_model=schemas.TFModel)
 def tfmodel_by_id(id: int, db: Session = Depends(get_db)):
   db_model = usecases.find_tfmodel_by_id(id=id, db=db)
@@ -28,13 +27,13 @@ def tfmodel_by_id(id: int, db: Session = Depends(get_db)):
   return db_model
 
 
-# Adiciona um model ja existente
+## Adiciona um model a partir de um caminho
 @tfmodels_router.post("/add")
 def tfmodel_add(model: schemas.AddTFModel, db: Session = Depends(get_db)):
   return usecases.add_tfmodel(db=db, model=model)
 
 
-# Faz uma predicao com o model do id
+## Faz uma predição, dado o ID do model e o caminho da imagem
 @tfmodels_router.post("/predict")
 def tfmodel_predict(pred: schemas.ModelPredict, db: Session = Depends(get_db)):
   db_model = usecases.find_tfmodel_by_id(id=pred.model_id, db=db)
